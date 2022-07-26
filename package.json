@@ -35,5 +35,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "_comment": "proxy address removed because it was throwing an error on compilation"
 }
