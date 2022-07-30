@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 import blogService from '../services/blogs'
 
 const BlogForm = ({ blogs, setBlogs, setNotification }) => {
@@ -31,22 +32,26 @@ const BlogForm = ({ blogs, setBlogs, setNotification }) => {
     }
   }
 
+  const formStyles = {
+
+  }
+
   const toggleForm = () => {
     setFormHidden(!formHidden)
   }
 
   if (formHidden) {
     return (
-      <button onClick={toggleForm}>New Blog</button>
+      <button onClick={toggleForm}>Add a New Blog</button>
     )
   }
 
   return (
     <div>
       <h2>add a new blog</h2>
-      <form onSubmit={handleSubmit}>
+      <form style={formStyles} onSubmit={handleSubmit}>
         <div>title:
-          <input 
+          <input
             type="text"
             value={title}
             name="title"
@@ -54,7 +59,7 @@ const BlogForm = ({ blogs, setBlogs, setNotification }) => {
           />
         </div>
         <div>author:
-        <input 
+          <input
             type="text"
             value={author}
             name="title"
@@ -62,7 +67,7 @@ const BlogForm = ({ blogs, setBlogs, setNotification }) => {
           />
         </div>
         <div>url:
-        <input 
+          <input
             type="text"
             value={url}
 
@@ -71,9 +76,16 @@ const BlogForm = ({ blogs, setBlogs, setNotification }) => {
           />
         </div>
         <button type="submit">add blog</button>
+        <button onClick={toggleForm}>cancel</button>
       </form>
     </div>
   )
+}
+
+BlogForm.propTypes = {
+  blogs: PropTypes.array.isRequired,
+  setBlogs: PropTypes.func.isRequired,
+  setNotification: PropTypes.func.isRequired
 }
 
 export default BlogForm

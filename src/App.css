@@ -1,4 +1,17 @@
-.notification{
+.notification {
   color: orangered;
   font-size: larger;
+}
+
+button {
+  margin-left: 6px;
+  background-color: lightblue;
+  border: 1px solid gray;
+  border-radius: 3px;
+  margin-top: 4px;
+}
+
+input {
+  margin-top: 4px;
+  margin-left: 3px;
 }
