@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, username, updateBlogLikes, removeBlog }) => {
+const Blog = ({ blog, removeBlog, username, updateBlogLikes }) => {
   const [blogHidden, setBlogHidden] = useState(true)
 
   const toggleBlog = () => {
@@ -10,38 +10,39 @@ const Blog = ({ blog, username, updateBlogLikes, removeBlog }) => {
 
   const blogStyles = {
     listStyleType: 'none',
-    borderRadius: 4,
+    borderBottomRightRadius: 16,
     border: '1px solid gray',
-    marginTop: 2,
-    marginLeft: 3,
+    marginTop: '0.2em',
+    marginBottom: 0,
+    marginLeft: '0.5em',
     width: 200,
-    padding: 4
+    padding: 5
   }
 
   const buttonStyle = {
-    backgroundColor:'lightgray',
+    backgroundColor:'white',
     borderRadius: 3,
     border: '1px solid gray',
     margin: 2,
-    marginLeft: 3,
+    marginLeft: 0,
     padding: 3
   }
 
   const showRemoveButton = () => (
-    <li><button style={buttonStyle} onClick={() => removeBlog(blog)}>remove</button></li>
+    <li><button data-cy="remove-button" style={buttonStyle} onClick={() => removeBlog(blog)}>remove</button></li>
   )
 
   const blogDetails = () => (
-    <ul style={blogStyles}>
+    <ul className='blog-details' style={blogStyles}>
       <li><b>{blog.url}</b></li>
-      <li>likes: {blog.likes}<button onClick={() => updateBlogLikes(blog)}>like</button></li>
-      <li>user: {JSON.stringify(blog.user.name)}</li>
+      <li>likes: {blog.likes}<button data-cy="like-button" onClick={() => updateBlogLikes(blog)}>like</button></li>
+      <li>uploaded by user: {JSON.stringify(blog.user.name)}</li>
       {username !== blog.user.name ? null : showRemoveButton()}
     </ul>
   )
 
   return (
-    <div style={{ margin: 3 }}>
+    <div className='blog' style={{ margin: 3 }}>
       <em>{blog.title}</em> by {blog.author}
       <button onClick={toggleBlog}>{blogHidden ? 'view' : 'hide'}</button>
       {blogHidden ? null : blogDetails()}

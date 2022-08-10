@@ -1,39 +1,25 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import blogService from '../services/blogs'
 
-const BlogForm = ({ blogs, setBlogs, setNotification }) => {
+const BlogForm = ({ submitBlog }) => {
   const [formHidden, setFormHidden] = useState(true)
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    try {
-      const newBlog = await blogService
-        .postNewBlog({
-          title, author, url
-        })
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      setBlogs([...blogs, newBlog])
-      toggleForm()
-      setNotification(`a new blog: ${newBlog.title} was added to the list`)
-      setTimeout(() => {
-        setNotification(null)
-      }, 3000)
-    } catch(error) {
-      setNotification('error: new blogs must have a title and a valid url')
-      setTimeout(() => {
-        setNotification(null)
-      }, 3000)
-    }
+  const cancelForm = () => {
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+    toggleForm()
   }
 
-  const formStyles = {
-
+  const handleSubmit = (blog) => {
+    submitBlog(blog)
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+    toggleForm()
   }
 
   const toggleForm = () => {
@@ -42,19 +28,20 @@ const BlogForm = ({ blogs, setBlogs, setNotification }) => {
 
   if (formHidden) {
     return (
-      <button onClick={toggleForm}>Add a New Blog</button>
+      <button id="add-blog-button" onClick={toggleForm}>Add a New Blog</button>
     )
   }
 
   return (
     <div>
       <h2>add a new blog</h2>
-      <form style={formStyles} onSubmit={handleSubmit}>
+      <form id="blog-form" onSubmit={() => handleSubmit({ title, author, url })} >
         <div>title:
           <input
             type="text"
             value={title}
             name="title"
+            id="title"
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
@@ -62,7 +49,8 @@ const BlogForm = ({ blogs, setBlogs, setNotification }) => {
           <input
             type="text"
             value={author}
-            name="title"
+            name="author"
+            id="author"
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
@@ -70,22 +58,20 @@ const BlogForm = ({ blogs, setBlogs, setNotification }) => {
           <input
             type="text"
             value={url}
-
-            name="title"
+            name="url"
+            id="url"
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button type="submit">add blog</button>
-        <button onClick={toggleForm}>cancel</button>
+        <button id="submit-blog-button" type="submit">add blog</button>
+        <button onClick={cancelForm}>cancel</button>
       </form>
     </div>
   )
 }
 
 BlogForm.propTypes = {
-  blogs: PropTypes.array.isRequired,
-  setBlogs: PropTypes.func.isRequired,
-  setNotification: PropTypes.func.isRequired
+  submitBlog: PropTypes.func.isRequired
 }
 
 export default BlogForm

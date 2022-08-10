@@ -89,6 +89,21 @@ const App = () => {
     }
   }
 
+  const submitBlog = async (blog) => {
+    try {
+      const newBlog = await blogService.postNewBlog(blog)
+      setBlogs([...blogs, newBlog])
+      setNotification(`a new blog: ${newBlog.title} was added to the list`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 3000)
+    } catch(error) {
+      setNotification('error: new blogs must have a title and a valid url')
+      setTimeout(() => {
+        setNotification(null)
+      }, 3000)
+    }
+  }
 
   // Page Views //
 
@@ -99,6 +114,7 @@ const App = () => {
       <form onSubmit={handleLogin}>
         <div>username:
           <input
+            id="username"
             type="text"
             value={username}
             name="Username"
@@ -107,35 +123,41 @@ const App = () => {
         </div>
         <div>password:
           <input
+            id="password"
             type="password"
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type="submit">login</button>
+        <button id="login-button" type="submit">login</button>
       </form>
     </div>
   )
 
   const blogsPage = () => (
     <div>
-      <h4>logged in as: {user.name} <button onClick={handleLogout}>log out</button></h4>
+      <p>logged in as: <b>{user.name}</b>
+        <button id="logout-button"
+          style={{ backgroundColor: 'lightgray' }}
+          onClick={handleLogout}
+        >log out</button>
+      </p>
       <div className="notification">{notification}</div>
-      <h2>blogs</h2>
-      {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map(blog =>
-          <Blog key={blog.id}
-            blog={blog}
-            username={user.name}
-            updateBlogLikes={updateBlogLikes}
-            removeBlog={removeBlog}
-          />
-        )}
-      <BlogForm blogs={blogs}
-        setBlogs={setBlogs}
-        setNotification={setNotification}
+      <div id="blogs-list">
+        <h2>blogs</h2>
+        {blogs
+          .sort((a, b) => b.likes - a.likes)
+          .map(blog =>
+            <Blog key={blog.id}
+              blog={blog}
+              username={user.name}
+              updateBlogLikes={updateBlogLikes}
+              removeBlog={removeBlog}
+            />
+          )}
+      </div>
+      <BlogForm submitBlog={submitBlog}
       />
     </div>
   )
